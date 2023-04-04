@@ -84,6 +84,7 @@ class MyForm(QDialog):
         self.mapper.setCurrentIndex(row)
         self.model.select()
         self.ui.pushButtonNext.setEnabled(row < self.model.rowCount() - 1)
+        self.mapper.setCurrentIndex(row)
 
     def addrow(self):
         print("exucting adding function")
