@@ -1,5 +1,6 @@
 import sys  # needed for the sys.argv passed to QApplication below (command line arguments)
 from PyQt6 import QtSql
+from PyQt6.QtCore import QDate
 from PyQt6.QtWidgets import QDialog, QApplication, QDataWidgetMapper, QMessageBox, QSpacerItem, QSizePolicy
 from PyQt6.uic import loadUi  # special library to load .ui file directly
 from pathlib import Path
@@ -58,15 +59,49 @@ class MyForm(QDialog):
         self.mapper.addMapping(self.ui.lineEditDateDue, self.model.fieldIndex("maint_nxdate"))
         self.mapper.addMapping(self.ui.lineEditMileageDue, self.model.fieldIndex("maint_nxmi"))
 
+        # Connect navigation buttons.
+        self.pushButtonPrevious.clicked.connect(self.mapper.toPrevious)
+        self.pushButtonNext.clicked.connect(self.mapper.toNext)
+        self.mapper.currentIndexChanged.connect(self.updateButtons)
+        self.ui.pushButtonAdd.clicked.connect(self.addrow)
+        self.ui.pushButtonDelete.clicked.connect(self.deleterow)
+
 
         self.mapper.toFirst()
-
-
-
 
     def exitMethod(self):
         self.conn.close()
         QApplication.instance().quit()
+
+    def updateButtons(self, row):
+        self.ui.pushButtonPrevious.setEnabled(row > 0)
+        self.ui.pushButtonNext.setEnabled(row < self.model.rowCount() - 1)
+
+
+    def deleterow(self):
+        row = self.model.rowCount() - 2
+        self.model.removeRow(self.mapper.currentIndex())
+        self.mapper.setCurrentIndex(row)
+        self.model.select()
+        self.ui.pushButtonNext.setEnabled(row < self.model.rowCount() - 1)
+
+    def addrow(self):
+        print("exucting adding function")
+        row = self.model.rowCount()  # this is one more than the zero-based index so it adds a new row
+        self.model.insertRow(row)
+        self.mapper.setCurrentIndex(row)
+        self.ui.lineEditMaintNumber.setText(str(row + 1))  # make next task id next number!
+        self.ui.dateEdit.setDate(QDate(2023, 4, 3))
+        self.ui.lineEditMileage.setText("25")
+        self.ui.lineEditPerformed.setText("Damir Zababuryn")
+        self.ui.plainTextEdit.setPlainText("Added by Damir Zababuryn")
+        self.ui.lineEditCost.setText("50$")
+        self.ui.lineEditDateDue.setText("04/10/2023")
+        self.ui.lineEditMileageDue.setText("100")
+        self.ui.comboBox.setCurrentIndex(0)  # make project id a valid project
+        self.mapper.submit()
+
+
 
     def setupModels(self):
         self.model.setTable('Maintenance')  # for editable QSqlTableModel()
