@@ -45,7 +45,21 @@ class MyForm(QDialog):
         self.mapper.setModel(self.model)
         self.mapper.setItemDelegate(QtSql.QSqlRelationalDelegate())
 
-        self.mapper.addMapping(self.ui.comboBox, self.project_index)  # related field in Projects table
+         # related field in Vehciles table
+
+        self.mapper.addMapping(self.ui.lineEditMaintNumber, self.model.fieldIndex("maint_num"))
+        self.mapper.addMapping(self.ui.comboBox, self.project_index)
+        self.mapper.addMapping(self.ui.dateEdit,
+                              self.model.fieldIndex("maint_date"))
+        self.mapper.addMapping(self.ui.lineEditMileage, self.model.fieldIndex("maint_mi"))
+        self.mapper.addMapping(self.ui.lineEditPerformed, self.model.fieldIndex("maint_by"))
+        self.mapper.addMapping(self.ui.plainTextEdit, self.model.fieldIndex("maint_desc"))
+        self.mapper.addMapping(self.ui.lineEditCost, self.model.fieldIndex("maint_cost"))
+        self.mapper.addMapping(self.ui.lineEditDateDue, self.model.fieldIndex("maint_nxdate"))
+        self.mapper.addMapping(self.ui.lineEditMileageDue, self.model.fieldIndex("maint_nxmi"))
+
+
+        self.mapper.toFirst()
 
 
 
