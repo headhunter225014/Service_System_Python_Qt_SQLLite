@@ -1,3 +1,6 @@
+#Made by Damir Zababuryn
+#04/05/2023
+
 import sys  # needed for the sys.argv passed to QApplication below (command line arguments)
 from PyQt6 import QtSql
 from PyQt6.QtCore import QDate
@@ -71,6 +74,7 @@ class MyForm(QDialog):
 
     def exitMethod(self):
         self.conn.close()
+        print("Project 7 end of work! Made By Damir Zababuryn")
         QApplication.instance().quit()
 
     def updateButtons(self, row):
