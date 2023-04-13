@@ -22,7 +22,7 @@ class MyForm(QDialog):
         bool_is_there = pathobj.expanduser().is_file()
 
         if not bool_is_there:
-            print("no path to db")
+            print("path to database wasn't found")
 
         #create connection with db
         self.conn = QtSql.QSqlDatabase.addDatabase('QSQLITE')
